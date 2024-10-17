@@ -20,6 +20,8 @@ bot_config = BotConfig(**dotenv_values())
 
 bot = telebot.TeleBot(bot_config.token)
 
+f = Fdown()
+
 help = (
     "Greetings %(user)s.\n"
     f"I can help you download Facebook videos under {bot_config.duration_limit} seconds. \n"
@@ -74,7 +76,6 @@ def echo_help(msg: types.Message):
 @bot.message_handler(regexp=r"https://.+\.facebook\.com.+?mibextid=\w{16}")
 @error_handler()
 def download_and_send_video(msg: types.Message):
-    f = Fdown()
     video_links = f.get_links(msg.text)
     saved_to = f.download_video(
         video_links,
