@@ -50,7 +50,6 @@ def error_handler(help="An error occured and I couldn't complete that request!")
             try:
                 return func(message)
             except Exception as e:
-                print(e)
                 markup = types.InlineKeyboardMarkup()
                 markup.add(inline_delete_button(message))
                 return bot.reply_to(message, help, reply_markup=markup)
@@ -87,7 +86,7 @@ def download_and_send_video(msg: types.Message):
 
     bot.send_video(
         msg.chat.id,
-        open(saved_to, "wb"),
+        open(saved_to, "rb"),
         thumbnail=thumbnail,
         caption=video_links.title,
         reply_markup=markup,
