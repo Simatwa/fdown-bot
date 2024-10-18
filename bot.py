@@ -88,7 +88,8 @@ def download_and_send_video(msg: types.Message):
     video_links = f.get_links(msg.text)
     markup = types.InlineKeyboardMarkup()
     markup.add(inline_delete_button(msg))
-    if video_links.duration_in_seconds > bot_config.duration_limit:
+    video_duration = video_links.duration_in_seconds
+    if video_duration > bot_config.duration_limit or video_duration == 0:
         return bot.reply_to(
             msg,
             text=(
