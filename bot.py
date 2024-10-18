@@ -45,7 +45,7 @@ def inline_delete_button(message: types.Message) -> types.InlineKeyboardButton:
     return button
 
 
-def error_handler(help="An error occured and I couldn't complete that request!"):
+def error_handler(help="😔 An error occured and I couldn't complete that request!"):
 
     def main(func):
         def decorator(message: types.Message):
@@ -73,7 +73,7 @@ def echo_help(msg: types.Message):
     )
 
 
-@bot.message_handler(regexp=r"https://.+\.facebook\.com.+?mibextid=\w{16}")
+@bot.message_handler(func=lambda msg: f.validate_url(msg.text,True))
 @error_handler()
 def download_and_send_video(msg: types.Message):
     video_links = f.get_links(msg.text)
@@ -81,9 +81,19 @@ def download_and_send_video(msg: types.Message):
         video_links,
         progress_bar=False,
     )
-    thumbnail = f.session.get(video_links.cover_photo).content
     markup = types.InlineKeyboardMarkup()
     markup.add(inline_delete_button(msg))
+    if video_links.duration_in_seconds > bot_config.duration_limit:
+        return bot.reply_to(
+            msg,
+            text=(
+                f"😢 This video's running time, {video_links.duration}, "
+                f"exceeds the one I can download ({bot_config.duration_limit/60} minutes)."
+            ),
+            reply_markup=markup,
+        )
+
+    thumbnail = f.session.get(video_links.cover_photo).content
 
     bot.send_video(
         msg.chat.id,
@@ -102,7 +112,7 @@ def any_other_text(msg):
     markup.add(inline_delete_button(msg))
     bot.reply_to(
         msg,
-        text="Kindly send a me a valid link to a Facebook video.",
+        text=" 😀 Kindly send me a valid link to a Facebook video.",
         reply_markup=markup,
     )
     return

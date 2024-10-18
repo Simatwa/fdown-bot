@@ -1,4 +1,4 @@
-fdown-api==0.0.1
+fdown-api==0.0.2
 pytelegrambotapi==4.23.0
 pydantic==2.9.2
 python-dotenv==1.0.1
