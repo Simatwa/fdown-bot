@@ -24,7 +24,7 @@ f = Fdown()
 
 help = (
     "Greetings %(user)s.\n"
-    f"I can help you download Facebook videos under {round(bot_config.duration_limit/60,2)} minute(s). \n"
+    f"I can help you download Facebook videos under {round(bot_config.duration_limit/60,2)} minutes. \n"
     "Send me any video url and I will download then send it over to you.\n\n"
     "Made with ❤️ by @AlphaBei from Kenya 🇰🇪"
 )
@@ -77,21 +77,21 @@ def echo_help(msg: types.Message):
 @error_handler()
 def download_and_send_video(msg: types.Message):
     video_links = f.get_links(msg.text)
-    saved_to = f.download_video(
-        video_links,
-        progress_bar=False,
-    )
     markup = types.InlineKeyboardMarkup()
     markup.add(inline_delete_button(msg))
     if video_links.duration_in_seconds > bot_config.duration_limit:
         return bot.reply_to(
             msg,
             text=(
-                f"😢 This video's running time, {video_links.duration}, "
+                f"😢 This video's running time ({video_links.duration}) "
                 f"exceeds the one I can download ({round(bot_config.duration_limit/60,2)} minutes)."
             ),
             reply_markup=markup,
         )
+    saved_to = f.download_video(
+        video_links,
+        progress_bar=False,
+    )
 
     thumbnail = f.session.get(video_links.cover_photo).content
 
