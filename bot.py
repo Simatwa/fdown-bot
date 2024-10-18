@@ -78,7 +78,9 @@ def echo_help(msg: types.Message):
         types.InlineKeyboardButton("Contact Developer", url="https://t.me/AlphaBei")
     )
     return bot.reply_to(
-        msg, help % dict(user=msg.from_user.username), reply_markup=markup
+        msg,
+        help % dict(user=msg.from_user.username or msg.from_user.first_name),
+        reply_markup=markup,
     )
 
 
@@ -109,7 +111,7 @@ def download_and_send_video(msg: types.Message):
         msg.chat.id,
         open(saved_to, "rb"),
         thumbnail=thumbnail,
-        caption=video_links.title,
+        # caption=video_links.title,
         reply_markup=markup,
     )
     remove(saved_to)
