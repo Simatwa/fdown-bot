@@ -1,5 +1,5 @@
 from fdown_api import Fdown
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 from dotenv import dotenv_values
 from os import remove
 import typing as t
@@ -14,6 +14,15 @@ class BotConfig(BaseModel):
     timeout: t.Optional[int] = 20
     skip_pending: t.Optional[bool] = False
     long_polling_timeout: t.Optional[int] = 20
+    video_quality: t.Optional[str] = "best"
+
+    @field_validator("video_quality")
+    def validate_video_quality(value: str) -> str:
+        if value not in Fdown.video_quality_options:
+            raise ValueError(
+                f"Video quality '{value}' is not one of {Fdown.video_quality_options}"
+            )
+        return value
 
 
 bot_config = BotConfig(**dotenv_values())
