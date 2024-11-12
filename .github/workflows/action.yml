@@ -31,7 +31,7 @@ jobs:
     - name: Setup .env file
       run: |
         echo "token=${{ secrets.BOT_TOKEN }}" > .env
-        echo "admin-id=${{ secrets.ADMIN_ID }}" >> .env
+        echo "admin_id=${{ secrets.ADMIN_ID }}" >> .env
         echo "duration_limit=${{ secrets.DURATION_LIMIT }}" >> .env
         echo "\ntimeout=20;\nskip_pending=False\nlong_polling_timeout=20\nvideo_quality=best" >> .env
     - name: Running bot
