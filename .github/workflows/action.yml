@@ -1,0 +1,39 @@
+name: Run Bot
+
+on:
+  schedule:
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'
+        required: true
+        default: 'warning'
+        type: choice
+        options:
+        - info
+        - warning
+        - debug
+  
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install Python 3
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.12
+    - name: Install Dependencies
+      run: |
+          pip install -U pip
+          pip install -r requirements.txt
+    - name: Setup .env file
+      run: |
+        echo "telegram-token=${{ secrets.BOT_TOKEN }}" > .env
+        echo "admin-id=${{ secrets.ADMIN_ID }}" >> .env
+        echo "duration_limit=${{ secrets.DURATION_LIMIT }}" >> .env
+        echo "\ntimeout=20;\nskip_pending=False\nlong_polling_timeout=20\nvideo_quality=best" >> .env
+    - name: Running bot
+      run: |
+        python3 bot.py

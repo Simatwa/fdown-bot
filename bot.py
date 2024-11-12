@@ -29,6 +29,8 @@ bot_config = BotConfig(**dotenv_values())
 
 bot = telebot.TeleBot(bot_config.token)
 
+bot.remove_webhook()
+
 f = Fdown()
 
 help = (
