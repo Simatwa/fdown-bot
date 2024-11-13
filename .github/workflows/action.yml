@@ -1,8 +1,8 @@
 name: Run Bot
 
 on:
-  push:
-    branches: [ "main" ]
+  schedule:
+    - cron: '0 */5 * * *'
 
   workflow_dispatch:
     inputs:
@@ -15,6 +15,7 @@ on:
         - info
         - warning
         - debug
+
 jobs:
   build:
     runs-on: ubuntu-latest
